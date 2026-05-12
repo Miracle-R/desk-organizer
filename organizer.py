@@ -1,5 +1,3 @@
-import os
-import sys
 import shutil
 import csv
 import yaml
@@ -71,7 +69,6 @@ def extract_text(file_path):
 def classify_document(text, categories):
     title_region = text[:200].lower()
     full_text = text.lower()
-
     scores = {}
     for cat in categories:
         score = 0
@@ -87,8 +84,8 @@ def classify_document(text, categories):
         return '未分类'
     return max(scores, key=scores.get)
 
-# ========== 4. 安全移动 ==========
-def safe_move(src, dst_dir):
+# ========== 4. 安全移动（含日志） ==========
+def safe_move(src, dst_dir, log_file=None):
     dst_dir.mkdir(parents=True, exist_ok=True)
     dst = dst_dir / src.name
     base = src.stem
@@ -98,17 +95,22 @@ def safe_move(src, dst_dir):
         dst = dst_dir / f'{base}_{counter}{ext}'
         counter += 1
     shutil.move(str(src), str(dst))
+    if log_file:
+        with open(log_file, 'a', encoding='utf-8') as f:
+            f.write(f'{src}|{dst}\n')
     return dst
 
 # ========== 5. 主流程 ==========
 def main():
     if not Path('categories.yaml').exists():
-        print('未找到 categories.yaml，请创建分类配置文件。')
+        print('错误：未找到 categories.yaml 配置文件，请将它与程序放在同一文件夹下。')
+        input('按回车键退出...')
         return
     categories = load_categories()
 
     desktop = Path.home() / 'Desktop'
     archive_root = desktop / f'桌面整理_{datetime.now().strftime("%Y%m%d_%H%M%S")}'
+    log_path = archive_root / 'undo_log.txt'
 
     files = [
         f for f in desktop.iterdir()
@@ -116,10 +118,22 @@ def main():
     ]
     if not files:
         print('桌面空空如也，没有需要整理的文件。')
+        input('按回车键退出...')
         return
 
-    print(f'找到 {len(files)} 个文件，开始整理...\n')
+    print(f'找到 {len(files)} 个文件：')
+    for f in files:
+        print(f'  - {f.name}')
+    print(f'\n整理后文件将移动到：{archive_root}')
 
+    # 确认环节
+    confirm = input('\n按回车键开始整理，输入 n 取消... ')
+    if confirm.lower() == 'n':
+        print('已取消整理。')
+        input('按回车键退出...')
+        return
+
+    print('\n开始整理...\n')
     for file in files:
         print(f'处理: {file.name}')
         text = extract_text(file)
@@ -128,13 +142,15 @@ def main():
         else:
             category = classify_document(text, categories)
         try:
-            dest = safe_move(file, archive_root / category)  
-            print(f'  ✅ 归类至: {category}')                
+            dest = safe_move(file, archive_root / category, log_file=log_path)
+            print(f'  ✅ 归类至: {category}')
         except Exception as e:
             print(f'  ❌ 移动失败: {e}')
 
     print('\n===== 整理完成 =====')
     print(f'归档位置: {archive_root}')
+    print(f'如需撤销整理，请运行 undo.py，并输入日志文件路径：{log_path}')
+    input('\n按回车键退出...')
 
 if __name__ == '__main__':
     main()
