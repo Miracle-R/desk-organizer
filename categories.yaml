@@ -1,0 +1,42 @@
+categories:
+  - name: 尽调报告
+    title_keywords: ['尽职调查', '尽调报告', 'due diligence']
+    fulltext_keywords: ['尽调', '标的公司', '财务数据', '风险评估']
+
+  - name: 审查报告
+    title_keywords: ['审查报告', '审计报告', '审查意见']
+    fulltext_keywords: ['审计', '合规', '风险审查']
+
+  - name: 制度与规定
+    title_keywords: ['管理办法', '制度', '规定', '条例', '规范', '规程']
+    fulltext_keywords: ['制度', '修订', '施行日期', '适用范围']
+
+  - name: 人事管理
+    title_keywords: ['周报', '出差审批', '费用报销', '请假单', '加班申请', '人事']
+    fulltext_keywords: ['出差', '报销', '请假', '考勤', '调休']
+
+  - name: 汇报材料
+    title_keywords: ['关于', '请示', '情况说明', '汇报', '总结报告']
+    fulltext_keywords: ['请示', '汇报', '情况说明', '工作总结']
+
+  - name: 合同与协议
+    title_keywords: ['合同', '协议', '契约', 'contract', 'agreement']
+    fulltext_keywords: ['甲方', '乙方', '条款', '签章', '违约责任']
+
+  - name: 法律意见书
+    title_keywords: ['法律意见书', '律师函', '法律分析']
+    fulltext_keywords: ['法律意见', '法律风险', '出具']
+
+  - name: 财务报表
+    title_keywords: ['财务报表', '利润表', '资产负债表', '现金流量表']
+    fulltext_keywords: ['营业收入', '净利润', '资产总额', '财务指标']
+
+  - name: 日常管理
+    title_keywords: ['通知', '公告', '会议通知', '值日表', '注意事项']
+    fulltext_keywords: ['通知', '安排', '值班', '会议通知']
+
+  - name: 项目资料
+    title_keywords: ['项目计划', 'WBS', '里程碑', '需求文档', '立项', '结项']
+    fulltext_keywords: ['项目', '进度', '验收', '交付物']
+
+  # 在这里可以自行增加新类别，格式参考上面
